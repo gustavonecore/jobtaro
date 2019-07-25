@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php require __DIR__ . '/../vendor/autoload.php';
+
+$redisDriver = new \Gcore\JobTaro\Drivers\RedisQueueDriver([
+	'host' => '127.0.0.1',
+	'port' => 6379,
+	'scheme_extensions' => ['phpredis'],
+	'queue' => \Gcore\JobTaro\Drivers\RedisQueueDriver::DEFAULT_FAILED_QUEUE,
+]);
+
+(new \Gcore\JobTaro\Workers\Worker(
+	$redisDriver,
+	new \Gcore\JobTaro\SimpleContainer,
+	new \Gcore\JobTaro\SimpleLogger)
+)->run();
