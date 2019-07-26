@@ -3,10 +3,11 @@
 use Gcore\JobTaro\Contracts\JobInterface;
 use Gcore\JobTaro\Contracts\QueueDriverInterface;
 use Gcore\JobTaro\Contracts\QueueMessageInterface;
+use Gcore\JobTaro\Contracts\WorkerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
-abstract class AbstractWorker
+abstract class AbstractWorker implements WorkerInterface
 {
 	/**
 	 * @var \Gcore\JobTaro\Contracts\QueueDriverInterface
@@ -51,19 +52,12 @@ abstract class AbstractWorker
 
 		$job->setJobId($qMessage->getId());
 		$job->setAttempts($qMessage->getAttempts());
-		$job->setComputedId($this->getComputedIdFromMessage($qMessage));
 
 		return $job;
 	}
 
 	/**
-	 * Generate an unique id for the given message
-	 *
-	 * @param QueueMessageInterface $qMessage
-	 * @return string
+	 * {@inheritDoc}
 	 */
-	public function getComputedIdFromMessage(QueueMessageInterface $qMessage) : string
-	{
-		return sha1(implode('', array_values($qMessage->getPayload())) . $qMessage->getHandlerName());
-	}
+	public abstract function run();
 }
