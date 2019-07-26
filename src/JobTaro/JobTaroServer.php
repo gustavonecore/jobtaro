@@ -5,7 +5,7 @@ use Symfony\Component\Process\Process;
 class JobTaroServer
 {
 	const DEFAULT_WORKERS = 3;
-	const PATH_BIN = __DIR__ . '/../../bin/';
+	const PATH_BIN = __DIR__ . '/../../bin/run-worker';
 
 	/**
 	 * @var array List of configurations for job server
@@ -28,6 +28,11 @@ class JobTaroServer
 	protected $numberOfWorkers;
 
 	/**
+	 * @var string  Path to the binary script to spawn workers
+	 */
+	protected $pathForWorker;
+
+	/**
 	 * Constructs the server
 	 *
 	 * @param array $options
@@ -47,6 +52,7 @@ class JobTaroServer
 	public function setOptions(array $options)
 	{
 		$this->numberOfWorkers = isset($options['workers']) ? $options['workers'] : self::DEFAULT_WORKERS;
+		$this->pathForWorker = isset($options['worker_path']) ? $options['worker_path'] : self::PATH_BIN;
 	}
 
 	/**
@@ -58,7 +64,7 @@ class JobTaroServer
 	{
 		for ($i = 0; $i < $this->numberOfWorkers; $i++)
 		{
-			$this->workers[] = new Process(['php', self::PATH_BIN . 'run-worker']);
+			$this->workers[] = new Process(['php', $this->pathForWorker]);
 		}
 	}
 
@@ -116,7 +122,7 @@ class JobTaroServer
 					unset($this->runningWorkers[$pid]);
 
 					// Restart
-					$restarted = new Process(['php', self::PATH_BIN . 'run-worker']);
+					$restarted = new Process(['php', $this->pathForWorker]);
 					$restarted->start();
 					$this->runningWorkers[$restarted->getPid()] = $restarted;
 				}
