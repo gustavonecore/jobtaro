@@ -1,5 +1,6 @@
 <?php namespace Gcore\JobTaro\Workers;
 
+use Gcore\JobTaro\Contracts\FailedJobProcessorInterface;
 use Gcore\JobTaro\Contracts\JobInterface;
 use Gcore\JobTaro\Contracts\QueueDriverInterface;
 use Gcore\JobTaro\Contracts\QueueMessageInterface;
@@ -25,17 +26,29 @@ abstract class AbstractWorker implements WorkerInterface
 	protected $logger;
 
 	/**
+	 * @var \Gcore\JobTaro\Contracts\FailedJobProcessorInterface|null
+	 */
+	protected $failedJobsHandler;
+
+	/**
 	 * Constructs the worker
 	 *
-	 * @param \Gcore\JobTaro\Contracts\QueueDriverInterface   $driver     Queue driver
-	 * @param \Psr\Container\ContainerInterface               $container  PSR Containeer instance to inject dependencies into jobs
-	 * @param \Psr\Container\LoggerInterface                  $container  PSR Logger instance
+	 * @param \Gcore\JobTaro\Contracts\QueueDriverInterface               $driver                Queue driver
+	 * @param \Psr\Container\ContainerInterface                           $container             PSR Containeer instance to inject dependencies into jobs
+	 * @param \Psr\Container\LoggerInterface                              $container             PSR Logger instance
+	 * @param \Gcore\JobTaro\Contracts\FailedJobProcessorInterface|null   $failedJobsHandler     Queue driver
 	 */
-	public function __construct(QueueDriverInterface $driver, ContainerInterface $container, LoggerInterface $logger)
+	public function __construct(
+		QueueDriverInterface $driver,
+		ContainerInterface $container,
+		LoggerInterface $logger,
+		FailedJobProcessorInterface $failedJobsHandler = null
+	)
 	{
 		$this->driver = $driver;
 		$this->container = $container;
 		$this->logger = $logger;
+		$this->failedJobsHandler = $failedJobsHandler;
 	}
 
 	/**

@@ -110,4 +110,18 @@ abstract class AbstractJob implements JobInterface
 	{
 		return $this->getAttempts() < $this->getMaxAttempts();
 	}
+
+	/**
+	 * Convert to string the  job instance
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return json_encode([
+			'id' => $this->getJobId(),
+			'attempts' => $this->getAttempts(),
+			'max_attempts' => $this->getMaxAttempts(),
+		]);
+	}
 }

@@ -4,3 +4,4 @@
 composer.phar
 /nbproject/*
 .editorconfig
+.failed_jobs.log

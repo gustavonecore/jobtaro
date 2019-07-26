@@ -1,0 +1,1 @@
+Job: {"id":"d1577f8b-73ad-4f66-a268-9e1340398771","attempts":3,"max_attempts":3} - Payload: {"email":"gustavo@onecore.cl","subject":"Hello Job Server!","message":"Process me!"}

@@ -9,7 +9,9 @@ $redisDriver = new \Gcore\JobTaro\Drivers\RedisQueueDriver([
 ]);
 
 (new \Gcore\JobTaro\Workers\Worker(
-	$redisDriver,
-	new \Gcore\JobTaro\SimpleContainer,
-	new \Gcore\JobTaro\SimpleLogger)
+		$redisDriver,
+		new \Gcore\JobTaro\SimpleContainer,
+		new \Gcore\JobTaro\SimpleLogger,
+		new \Gcore\JobTaro\FileStorageFailedJobProcessor
+	)
 )->run();
