@@ -64,7 +64,7 @@ class Worker extends AbstractWorker
 						{
 							$this->logger->error(get_class($job) . ' - Calling Failed job processor');
 
-							$this->failedJobsHandler->handle($job, $qMessage->getPayload());
+							$this->failedJobsHandler->handle($job, $qMessage->getPayload(), $e);
 						}
 						else
 						{
