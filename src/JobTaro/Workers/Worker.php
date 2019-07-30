@@ -54,7 +54,7 @@ class Worker extends AbstractWorker
 
 					if ($job->canRetry())
 					{
-						$this->logger->error(get_class($job) . ' - Requeuing into error because not handled exception');
+						$this->logger->error(get_class($job) . ' - Requeuing into error because not handled exception. Exception: ' . $e->getMessage());
 
 						$this->driver->enqueueError($qMessage, $job->getAttempts(), $e->getTraceAsString());
 					}
@@ -62,13 +62,13 @@ class Worker extends AbstractWorker
 					{
 						if ($this->failedJobsHandler)
 						{
-							$this->logger->error(get_class($job) . ' - Calling Failed job processor');
+							$this->logger->error(get_class($job) . ' - Calling Failed job processor. Exception: ' . $e->getMessage());
 
 							$this->failedJobsHandler->handle($job, $qMessage->getPayload(), $e);
 						}
 						else
 						{
-							$this->logger->error(get_class($job) . ' - Removing job from queue since it can not be processed');
+							$this->logger->error(get_class($job) . ' - Removing job from queue since it can not be processed. Exception: ' . $e->getMessage());
 						}
 					}
 
