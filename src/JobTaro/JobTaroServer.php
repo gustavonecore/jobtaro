@@ -72,7 +72,7 @@ class JobTaroServer
 	 */
 	public function setOptions(array $options)
 	{
-		if (!isset($options['worker_path']) || isset($options['worker_failed_path']))
+		if (!isset($options['worker_path']) || !isset($options['worker_failed_path']))
 		{
 			throw new InvalidArgumentException('You must define the path for worker and death letter worker binary paths');
 		}
